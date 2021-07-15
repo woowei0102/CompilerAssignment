@@ -1,0 +1,19 @@
+%{
+int num_tab=0;
+%}
+eol    [\t]*\n[\t]*
+left    \{
+right    \}
+eolright    [\t]*\n[\t]*\}
+
+%%
+{left}    {num_tab++; printf("{");}
+{right}    {num_tab--; printf("}");}
+{eol}    {printf("\n"); for (int i = 0; i < num_tab; i = i + 1) {printf("\t");};}
+{eolright}    {num_tab--; printf("\n"); for (int i = 0; i < num_tab; i = i + 1) {printf("\t");}; printf("}");}
+%%
+
+int main(int argc, char *argv[]) {
+    yylex();
+    return(0);
+}

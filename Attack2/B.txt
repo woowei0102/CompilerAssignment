@@ -1,0 +1,25 @@
+%{
+;
+%}
+Soul_Punch      (aas|dds)
+Uppercut        [`][w][s]
+Skull_Blast     [`][d][s]+
+Mirror_Image    [`][t]+[s][t]+
+Soul_Bomb       [`][d][t]
+Big_Bang        [`][w][t]
+eol             \n
+%%
+{Soul_Punch}    {printf("Soul_Punch\n");}
+{Uppercut}      {printf("Uppercut\n");}
+{Skull_Blast}   {printf("Skull_Blast\n");}
+{Mirror_Image}  {printf("Mirror_Image\n");}
+{Soul_Bomb}     {printf("Soul_Bomb\n");}
+{Big_Bang}      {printf("Big_Bang\n");}
+{eol}   {;}
+.       ;
+%%
+
+int main(int argc, char *argv[]) {
+    yylex();
+    return(0);
+}

@@ -1,0 +1,35 @@
+%{
+
+#include "y.tab.h"
+
+%}
+load load[ ]*[0-9]+
+add add
+sub sub
+mod mod
+mul mul
+inc inc
+dec dec
+copy copy
+delete delete
+switch switch
+
+
+%%
+\n              {;}
+{load}          {int x;
+                sscanf(yytext,"load %d",&x);
+                yylval.ival=x;return(load);}
+{add}           {return(add);}
+{sub}           {return(sub);}
+{mod}           {return(mod);}
+{mul}           {return(mul);}
+{inc}           {return(inc);}
+{dec}           {return(dec);}
+{copy}          {return(copy);}
+{delete}        {return(delete);}
+{switch}        {return(Switch);}
+
+. { return(yytext[0]); }
+
+%%

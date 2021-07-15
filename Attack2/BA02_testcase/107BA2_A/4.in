@@ -1,0 +1,20 @@
+#include <iostream>
+using namespace std;
+
+int main(){ 
+int input = 0; 
+int remain = 0; 
+
+cout << "Input a integer："; 
+cin >> input; 
+
+remain = input % 2; 
+	if(remain == 1){ 
+	cout << input << "odd" << endl;
+}		
+else{
+cout << input << "even" << endl; 
+}
+
+return 0;
+}

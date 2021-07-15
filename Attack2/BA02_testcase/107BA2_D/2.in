@@ -1,0 +1,5 @@
+S A$
+A B|C
+B A|C
+C A|B|e
+END_OF_GRAMMAR

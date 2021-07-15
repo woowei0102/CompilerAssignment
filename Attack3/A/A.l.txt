@@ -1,0 +1,27 @@
+%{
+int count=0;
+#include "y.tab.h"
+%}
+
+eof    \n
+white    [ \t]+
+matrix    \[[ \t]*[0-9]+[ \t]*\,[ \t]*[0-9]+[ \t]*\]
+trans    \^T
+add     \+
+sub     \-
+mul     \*
+other   [()]
+%%
+
+{eof}    { count++;return(0); /* EOF */ }
+{white}    { count+=yyleng; }
+{matrix}    {count+=yyleng;
+             int x, y;
+             sscanf(yytext, "[ %d , %d ]", &x, &y);
+             yylval.mat.x = x; yylval.mat.y = y; return(MATRIX); }
+{trans}    {count+=yyleng; return(trans); }
+{add}    { count++; yylval.ival=count; return(add); }
+{sub}    { count++; yylval.ival=count; return(sub); }
+{mul}    { count++; yylval.ival=count; return(mul); }
+{other} {count++; return(yytext[0]);}
+%%

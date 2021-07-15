@@ -1,0 +1,75 @@
+%{
+
+#include <stdio.h>
+
+#include <string.h>
+
+void yyerror(const char *message);
+int top=0;
+int stack[1000];
+void push(int i);
+int pop();
+%}
+
+%union {
+int ival;
+}
+
+%token <ival> load
+%token <ival> add sub mod mul inc dec copy delete Switch
+%type <ival> expr expr_tail
+%%
+
+line : expr     { if(top==1){printf("%d\n", stack[top]);}else{printf("Invalid format\n");};}
+;
+expr :load      {push($1);}
+     |  add     {printf("Invalid format\n");return 0;}
+     |  sub     {printf("Invalid format\n");return 0;}
+     |  mod     {printf("Invalid format\n");return 0;}
+     |  mul     {printf("Invalid format\n");return 0;}
+     |  inc     {printf("Invalid format\n");return 0;}
+     |  dec     {printf("Invalid format\n");return 0;}
+     |  copy    {printf("Invalid format\n");return 0;}
+     |  delete  {printf("Invalid format\n");return 0;}
+     |  Switch  {printf("Invalid format\n");return 0;}
+     |expr expr_tail
+
+;
+expr_tail:load  {push($1);}
+     |  add     {int x,y;if(top>=2){x=pop();y=pop();push(x+y);}else{printf("Invalid format\n");return 0;};}
+     |  sub     {int x,y;if(top>=2){x=pop();y=pop();push(x-y);}else{printf("Invalid format\n");return 0;};}
+     |  mod     {int x,y;if(top>=2){x=pop();y=pop();push(x%y);}else{printf("Invalid format\n");return 0;};}
+     |  mul     {int x,y;if(top>=2){x=pop();y=pop();push(x*y);}else{printf("Invalid format\n");return 0;};}
+     |  inc     {int x;if(top>=1){x=pop();x++;push(x);}else{printf("Invalid format\n");return 0;};}
+     |  dec     {int x;if(top>=1){x=pop();x--;push(x);}else{printf("Invalid format\n");return 0;};}
+     |  copy    {push(stack[top]);}
+     |  delete  {if(top>=1){pop();}else{printf("Invalid format\n");return 0;};}
+     |  Switch  {int x,y;if(top>=2){x=pop();y=pop();push(x);push(y);}else{printf("Invalid format\n");return 0;};}
+;
+%%
+void push(int item){
+    top++;
+    stack[top]=item;
+}
+int pop(){
+    int item;
+    item=stack[top];
+    top--;
+    return item;
+
+}
+void yyerror (const char *message)
+
+{
+
+fprintf (stderr, "%s\n",message);
+
+}
+
+int main(int argc, char *argv[]) {
+
+yyparse();
+
+return(0);
+
+}

@@ -1,0 +1,45 @@
+ %{
+#include <stdio.h>
+#include <string.h>
+int yylex();
+void yyerror(const char *message);
+%}
+
+%union {
+int ival;
+struct matrix {int x; int y; }mat;
+}
+
+%token <mat> MATRIX
+%token <ival> add sub mul
+%token trans
+%type <mat> expr
+%left add sub
+%left mul
+%left '('')'
+%left trans
+%%
+line  :expr        { printf("[%d,%d]\n", $1.x, $1.y); }
+    ;
+
+expr : expr add expr    { if(($1.x==$3.x)&&($1.y==$3.y)){$$=$1;}
+                          else{printf("Semantic error on col %d\n",$2);return 0;};}
+        |expr sub expr  { if(($1.x==$3.x)&&($1.y==$3.y)){$$=$1;}
+                          else{printf("Semantic error on col %d\n",$2);return 0;};}
+        |expr mul expr  { if($1.y==$3.x){$$.x=$1.x;$$.y=$3.y;}
+                          else{printf("Semantic error on col %d\n",$2);return 0;};}
+        |'(' expr ')'    { $$ = $2; }
+        |expr trans {int temp; temp = $1.x; $1.x = $1.y; $1.y = temp; $$ = $1; }
+        |MATRIX
+    ;
+
+%%
+void yyerror (const char *message)
+{
+    fprintf(stderr, "%s\n",message);
+}
+
+int main(int argc, char *argv[]) {
+    yyparse();
+    return(0);
+}
