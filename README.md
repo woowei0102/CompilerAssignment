@@ -1,4 +1,4 @@
-# 編譯器Compiler - 助教練習題
+# 編譯器Compiler題目練習
 
 ## 介紹
 在進入實驗室前，學長要求盡量把這三份BOSS Attack完成，是為了之後當Compiler助教作準備，而也順利完成。
